@@ -60,14 +60,14 @@ impl Scene for SnowyScreen {
                 if self.current_grid[dy as usize][dx as usize] == 1 {
                     let deltas: Vec<(i32, i32)> = vec![(-1,1),(1,1),(0,1)];
                     let mut rng = rand::rng();
-                    let num = rng.random_range(0..2);
+                    let num = rng.random_range(0..3);
                     let chosen_delta = deltas[num];
                     let nx = dx as i32 + chosen_delta.0;
                     let ny = dy as i32 + chosen_delta.1;
                     if ny < HEIGHT as i32 
                     && nx < WIDTH as i32
-                    && nx > 0
-                    && ny > 0 
+                    && nx >= 0
+                    && ny >= 0 
                     && self.current_grid[ny as usize][nx as usize] == 0 {
                         self.next_grid[ny as usize][nx as usize] = 1;
                     } else {
@@ -85,7 +85,7 @@ impl Scene for SnowyScreen {
         fb.clear([0, 0, 0, 0]);
         for dy in 0..HEIGHT {
             for dx in 0..WIDTH {
-                if self.next_grid[dy as usize][dx as usize] == 1 {
+                if self.current_grid[dy as usize][dx as usize] == 1 {
                     fb.put(dx as i32, dy as i32, [0xff,0xff,0xff,0xff]);
                 }
             }
