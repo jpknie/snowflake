@@ -1,3 +1,4 @@
+//@Author Jani Nieminen, 2025.. maybe some christmas demo
 
 use pixel_engine::{PixEngine, PixelBuffer, Scene};
 use rand::{prelude::*, random_range};
