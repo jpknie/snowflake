@@ -1,11 +1,11 @@
 
 use pixel_engine::{PixEngine, PixelBuffer, Scene};
-use rand::{prelude::*};
+use rand::{prelude::*, random_range};
 use std::{mem::swap, thread::sleep, time::Duration};
 
 const WIDTH: u32 = 640;
 const HEIGHT: u32 = 480;
-const N_SNOW: usize = 20;
+const N_SNOW: usize = 2;
 
 
 struct SnowyScreen {
@@ -57,11 +57,22 @@ impl Scene for SnowyScreen {
         for dy in (0..HEIGHT).rev() {
             for dx in 0..WIDTH {            
                 if self.current_grid[dy as usize][dx as usize] == 1 {
-                    if dy + 1 < HEIGHT && self.current_grid[(dy + 1) as usize][dx as usize] == 0 {
-                        self.next_grid[(dy + 1) as usize][dx as usize] = 1;
+                    let deltas: Vec<(i32, i32)> = vec![(-1,1),(1,1),(0,1)];
+                    let mut rng = rand::rng();
+                    let num = rng.random_range(0..2);
+                    let chosen_delta = deltas[num];
+                    let nx = dx as i32 + chosen_delta.0;
+                    let ny = dy as i32 + chosen_delta.1;
+                    if ny < HEIGHT as i32 
+                    && nx < WIDTH as i32
+                    && nx > 0
+                    && ny > 0 
+                    && self.current_grid[ny as usize][nx as usize] == 0 {
+                        self.next_grid[ny as usize][nx as usize] = 1;
                     } else {
                         self.next_grid[dy as usize][dx as usize] = 1;
                     }
+                    
                 }
             }
         }
